@@ -64,15 +64,20 @@ class GameRepository @Inject constructor(
         context: Context,
         game: Game,
         targetDir: java.io.File
-    ): java.io.File = withContext(Dispatchers.IO) {
+    ): java.io.File? = withContext(Dispatchers.IO) {
         val soFile = java.io.File(targetDir, game.library)
         if (!soFile.exists()) {
-            context.assets.open(game.library).use { input ->
-                soFile.outputStream().use { output ->
-                    input.copyTo(output)
+            try {
+                context.assets.open(game.library).use { input ->
+                    soFile.outputStream().use { output ->
+                        input.copyTo(output)
+                    }
                 }
+                soFile.setExecutable(true)
+            } catch (e: Exception) {
+                soFile.delete()
+                return@withContext null
             }
-            soFile.setExecutable(true)
         }
         soFile
     }

@@ -151,6 +151,18 @@ class GameDetailViewModel @Inject constructor(
                 if (!nativeDir.exists()) nativeDir.mkdirs()
                 val soFile = gameRepository.extractLibrary(context, game, nativeDir)
 
+                if (soFile == null) {
+                    withContext(Dispatchers.Main) {
+                        _uiState.value = _uiState.value.copy(
+                            isLaunching = false,
+                            status = GameStatus.Error,
+                            statusMessage = "Library extraction failed",
+                            canStart = true
+                        )
+                    }
+                    return@launch
+                }
+
                 withContext(Dispatchers.Main) {
                     _uiState.value = _uiState.value.copy(
                         statusMessage = "Launching game\u2026",
