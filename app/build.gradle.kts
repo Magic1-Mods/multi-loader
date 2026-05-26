@@ -40,7 +40,7 @@ android {
     defaultConfig {
         applicationId = "com.magic.loader"
         minSdk = 21
-        targetSdk = 36
+        targetSdk = 28
         versionCode = 1
         versionName = "1.0"
 
