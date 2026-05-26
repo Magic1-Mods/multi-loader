@@ -13,7 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -88,7 +88,7 @@ private fun CrashScreen(
                 }
                 Row {
                     IconButton(onClick = onCopy) {
-                        Icon(Icons.Default.ContentCopy, "Copy", tint = MaterialTheme.colorScheme.onSurface)
+                        Icon(Icons.Default.Share, "Copy", tint = MaterialTheme.colorScheme.onSurface)
                     }
                     IconButton(onClick = onRestart) {
                         Icon(Icons.Default.Refresh, "Restart", tint = MaterialTheme.colorScheme.onSurface)
