@@ -27,6 +27,7 @@ class MagicApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        CrashHandler.instance.init(this)
         runCatching {
             BlackBoxCore.get().doCreate()
             addLifecycleCallback()

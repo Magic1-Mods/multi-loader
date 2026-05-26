@@ -22,5 +22,10 @@
                     android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="CrashActivity"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/AppTheme" />
     </application>
 </manifest>
