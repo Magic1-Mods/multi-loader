@@ -176,7 +176,7 @@ dependencies {
     // Reflection libs
     implementation("com.github.tiann:FreeReflection:3.1.0")
     implementation("com.github.CodingGay.BlackReflection:core:1.1.4")
-    annotationProcessor("com.github.CodingGay.BlackReflection:compiler:1.1.4")
+    kapt("com.github.CodingGay.BlackReflection:compiler:1.1.4")
     
     // Zip utilities
     implementation("net.lingala.zip4j:zip4j:2.9.0")

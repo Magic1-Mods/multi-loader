@@ -5,7 +5,6 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import com.magic.loader.app.BoxApplication
 import dagger.hilt.android.HiltAndroidApp
 import top.niunaijun.blackbox.BlackBoxCore
 import top.niunaijun.blackbox.app.configuration.AppLifecycleCallback

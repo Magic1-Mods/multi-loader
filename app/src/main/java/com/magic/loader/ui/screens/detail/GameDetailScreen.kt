@@ -91,7 +91,7 @@ fun GameDetailScreen(
                                 ?: viewModel.onPermissionsResult(context, true)
                         }) {
                             Icon(
-                                Icons.Default.Security,
+                                Icons.Default.Lock,
                                 contentDescription = "Permissions",
                                 tint = WarningAmber
                             )
@@ -199,27 +199,12 @@ fun GameDetailScreen(
                     .scale(buttonScale),
                 shape = RoundedCornerShape(24.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent,
+                    containerColor = PrimaryIndigo,
                     disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
                 )
             ) {
-                Box(
-                    modifier = Modifier
-                        .matchParentSize()
-                        .clip(RoundedCornerShape(24.dp))
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = if (canLaunch)
-                                    listOf(PrimaryIndigo, SecondaryCyan)
-                                else
-                                    listOf(
-                                        MaterialTheme.colorScheme.surfaceVariant,
-                                        MaterialTheme.colorScheme.surfaceVariant
-                                    )
-                            )
-                        )
-                )
                 Row(
+                    modifier = Modifier.fillMaxSize(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
@@ -340,7 +325,7 @@ private fun GameIconSection(icon: android.graphics.drawable.Drawable?, gameName:
                 )
             } else {
                 Icon(
-                    imageVector = Icons.Default.Gamepad,
+                    imageVector = Icons.Default.PlayArrow,
                     contentDescription = null,
                     modifier = Modifier.size(56.dp),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
@@ -425,7 +410,7 @@ private fun RuntimeStatusRow(label: String, active: Boolean) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            imageVector = if (active) Icons.Default.CheckCircle else Icons.Default.HourglassEmpty,
+            imageVector = if (active) Icons.Default.CheckCircle else Icons.Default.Refresh,
             contentDescription = null,
             modifier = Modifier.size(18.dp),
             tint = if (active) SuccessGreen else MaterialTheme.colorScheme.onSurfaceVariant

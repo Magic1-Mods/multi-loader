@@ -44,10 +44,7 @@ fun GameCard(
         modifier = modifier
             .fillMaxWidth()
             .scale(cardScale)
-            .clickable(
-                onClick = onClick,
-                onLongClick = null
-            ),
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
