@@ -1,0 +1,44 @@
+{
+  "games": [
+    {
+      "name": "Call of Duty Mobile",
+      "package": "com.activision.callofduty.shooter",
+      "version": "1.0.54",
+      "library": "libcodm.so",
+      "updateUrl": "",
+      "description": "Call of Duty Mobile - Modern warfare on mobile"
+    },
+    {
+      "name": "PUBG Mobile",
+      "package": "com.tencent.ig",
+      "version": "3.8.0",
+      "library": "libpubg.so",
+      "updateUrl": "",
+      "description": "PUBG Mobile - Battle royale experience"
+    },
+    {
+      "name": "PUBG Mobile Beta",
+      "package": "com.tencent.ig",
+      "version": "3.6.0",
+      "library": "libpubgm.so",
+      "updateUrl": "",
+      "description": "PUBG Mobile Beta - Testing new features"
+    },
+    {
+      "name": "Mobile Legends",
+      "package": "com.mobile.legends",
+      "version": "1.8.92",
+      "library": "libmlbb.so",
+      "updateUrl": "",
+      "description": "Mobile Legends - MOBA action"
+    },
+    {
+      "name": "Free Fire",
+      "package": "com.dts.freefireth",
+      "version": "1.101.1",
+      "library": "libfreefire.so",
+      "updateUrl": "",
+      "description": "Free Fire - Fast-paced battle royale"
+    }
+  ]
+}

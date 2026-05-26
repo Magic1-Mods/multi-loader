@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Magic Mods</string>
+    <string name="start_game">Start Game</string>
+    <string name="update_game">Update Required</string>
+    <string name="about_text">Magic Mods - Virtual Game Launcher\nPowered by BCore Virtualization Technology</string>
+</resources>
