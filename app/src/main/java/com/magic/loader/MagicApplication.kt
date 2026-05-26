@@ -5,10 +5,12 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+
 import dagger.hilt.android.HiltAndroidApp
 import top.niunaijun.blackbox.BlackBoxCore
 import top.niunaijun.blackbox.app.configuration.AppLifecycleCallback
 import top.niunaijun.blackbox.app.configuration.ClientConfiguration
+import java.io.File
 
 @HiltAndroidApp
 class MagicApplication : Application() {
@@ -60,7 +62,18 @@ class MagicApplication : Application() {
                             override fun onActivityStarted(activity: Activity) {}
                             override fun onActivityResumed(activity: Activity) {
                                 if (!startMod) {
-                                    runCatching { Main.start() }.onFailure { it.printStackTrace() }
+                                    runCatching {
+                                        val libFile = try {
+                                            val ctx = activity.createPackageContext("com.magic.loader", 0)
+                                            File(ctx.filesDir, "current_lib.txt")
+                                        } catch (_: Exception) {
+                                            null
+                                        }
+                                        if (libFile?.exists() == true) {
+                                            Main.load(libFile.readText().trim())
+                                        }
+                                        Main.start()
+                                    }.onFailure { it.printStackTrace() }
                                     startMod = true
                                 }
                             }

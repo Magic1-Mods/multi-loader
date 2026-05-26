@@ -9,7 +9,6 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.magic.loader.Main
 import com.magic.loader.data.model.Game
 import com.magic.loader.data.repository.GameRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -170,7 +169,9 @@ class GameDetailViewModel @Inject constructor(
                     )
                 }
 
-                Main.init(soFile.absolutePath)
+                // Save library path for child process to load
+                File(context.filesDir, "current_lib.txt").writeText(soFile.absolutePath)
+
                 BlackBoxCore.get().installPackageAsUser(game.packageName, 0)
                 BlackBoxCore.get().launchApk(game.packageName, 0)
 

@@ -4,6 +4,8 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -19,10 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.magic.loader.data.model.Game
-import com.magic.loader.ui.theme.PrimaryIndigo
-import com.magic.loader.ui.theme.SecondaryCyan
-import com.magic.loader.ui.theme.SuccessGreen
-import com.magic.loader.ui.theme.WarningAmber
+import com.magic.loader.ui.theme.*
 
 @Composable
 fun GameCard(
@@ -33,21 +32,29 @@ fun GameCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var pressed by remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
     val cardScale by animateFloatAsState(
-        targetValue = if (pressed) 0.97f else 1f,
+        targetValue = if (isPressed) 0.97f else 1f,
         animationSpec = tween(100),
         label = "card_scale"
     )
 
-    Card(
+    GlassPanel(
         modifier = modifier
             .fillMaxWidth()
             .scale(cardScale)
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
+            ),
+        shape = RoundedCornerShape(20.dp),
+        gradient = Brush.linearGradient(
+            colors = listOf(GlassWhite, Color.Transparent),
+            start = androidx.compose.ui.geometry.Offset(0f, 0f),
+            end = androidx.compose.ui.geometry.Offset(0f, 600f)
+        )
     ) {
         Box {
             Column(
@@ -60,40 +67,40 @@ fun GameCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Top
                 ) {
-                    Text(
-                        text = game.name,
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.weight(1f),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = game.name,
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                            color = Color.White,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Spacer(Modifier.height(2.dp))
+                        Text(
+                            text = game.packageName,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                    Spacer(Modifier.width(12.dp))
                     StatusBadge(
                         isInstalled = isInstalled,
                         versionMatch = versionMatch
                     )
                 }
 
-                Spacer(Modifier.height(8.dp))
-
-                Text(
-                    text = game.packageName,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                Spacer(Modifier.height(6.dp))
+                Spacer(Modifier.height(12.dp))
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Surface(
                         shape = RoundedCornerShape(8.dp),
-                        color = PrimaryIndigo.copy(alpha = 0.15f)
+                        color = PrimaryIndigo.copy(alpha = 0.2f)
                     ) {
                         Text(
                             text = "v${game.version}",
-                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                             color = PrimaryIndigo,
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                         )
@@ -103,18 +110,18 @@ fun GameCard(
                         Spacer(Modifier.width(8.dp))
                         Text(
                             text = "Installed: v$installedVersion",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                         )
                     }
                 }
 
                 if (game.description != null) {
-                    Spacer(Modifier.height(8.dp))
+                    Spacer(Modifier.height(10.dp))
                     Text(
                         text = game.description,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -125,11 +132,11 @@ fun GameCard(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp)
-                    .size(48.dp)
-                    .clip(RoundedCornerShape(16.dp))
+                    .size(44.dp)
+                    .clip(RoundedCornerShape(14.dp))
                     .background(
                         brush = Brush.linearGradient(
-                            colors = listOf(PrimaryIndigo, SecondaryCyan)
+                            colors = GradientPrimary
                         )
                     ),
                 contentAlignment = Alignment.Center
@@ -152,7 +159,7 @@ fun StatusBadge(
 ) {
     val (text, color) = when {
         !isInstalled -> "Not Installed" to WarningAmber
-        !versionMatch -> "Update" to WarningAmber
+        !versionMatch -> "Update" to NeonAmber
         else -> "Ready" to SuccessGreen
     }
 
@@ -162,16 +169,20 @@ fun StatusBadge(
         label = "badge_alpha"
     )
 
-    Surface(
+    GlassPanel(
         modifier = modifier.alpha(badgeAlpha),
-        shape = RoundedCornerShape(12.dp),
-        color = color.copy(alpha = 0.15f)
+        shape = RoundedCornerShape(10.dp),
+        borderColor = color.copy(alpha = 0.3f),
+        gradient = Brush.linearGradient(
+            colors = listOf(color.copy(alpha = 0.1f), Color.Transparent)
+        ),
+        contentPadding = 0.dp
     ) {
         Text(
             text = text,
             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
             color = color,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
         )
     }
 }

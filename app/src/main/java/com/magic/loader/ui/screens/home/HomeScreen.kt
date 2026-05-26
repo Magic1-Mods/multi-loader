@@ -16,15 +16,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.magic.loader.data.repository.GameWithStatus
 import com.magic.loader.ui.components.GameCard
-import com.magic.loader.ui.theme.DarkBackground
-import com.magic.loader.ui.theme.PrimaryIndigo
-import com.magic.loader.ui.theme.SecondaryCyan
+import com.magic.loader.ui.components.GlassPanel
+import com.magic.loader.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,14 +44,14 @@ fun HomeScreen(
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = DarkBackground
+                    containerColor = Color.Transparent
                 ),
                 actions = {
                     IconButton(onClick = { viewModel.refresh() }) {
                         Icon(
                             Icons.Default.Refresh,
                             contentDescription = "Refresh",
-                            tint = MaterialTheme.colorScheme.onBackground
+                            tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                         )
                     }
                 }
@@ -89,20 +89,28 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(
-                                text = "Error",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.error
-                            )
-                            Spacer(Modifier.height(8.dp))
-                            Text(
-                                text = uiState.error ?: "",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(horizontal = 32.dp)
-                            )
+                        GlassPanel(
+                            modifier = Modifier.padding(32.dp),
+                            shape = RoundedCornerShape(20.dp),
+                            borderColor = ErrorRed.copy(alpha = 0.3f)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(24.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "Error",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = ErrorRed
+                                )
+                                Spacer(Modifier.height(8.dp))
+                                Text(
+                                    text = uiState.error ?: "",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
                     }
                 }
@@ -111,9 +119,9 @@ fun HomeScreen(
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(
-                            start = 20.dp, end = 20.dp, top = 8.dp, bottom = 24.dp
+                            start = 20.dp, end = 20.dp, top = 4.dp, bottom = 24.dp
                         ),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
                         item {
                             DashboardHeader()
@@ -144,24 +152,30 @@ fun HomeScreen(
                 }
             }
 
-            // Floating security badge
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(20.dp)
             ) {
-                Surface(
-                    shape = RoundedCornerShape(16.dp),
-                    color = PrimaryIndigo.copy(alpha = 0.15f)
+                GlassPanel(
+                    shape = RoundedCornerShape(14.dp),
+                    borderColor = PrimaryIndigo.copy(alpha = 0.3f),
+                    gradient = Brush.linearGradient(
+                        colors = listOf(
+                            PrimaryIndigo.copy(alpha = 0.12f),
+                            SecondaryCyan.copy(alpha = 0.05f)
+                        )
+                    ),
+                    contentPadding = 0.dp
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 9.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
                             Icons.Default.Lock,
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp),
+                            modifier = Modifier.size(14.dp),
                             tint = PrimaryIndigo
                         )
                         Spacer(Modifier.width(6.dp))
@@ -179,33 +193,28 @@ fun HomeScreen(
 
 @Composable
 private fun DashboardHeader() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(140.dp)
-            .clip(RoundedCornerShape(28.dp))
-            .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        PrimaryIndigo.copy(alpha = 0.3f),
-                        SecondaryCyan.copy(alpha = 0.15f),
-                        DarkBackground
-                    ),
-                    start = androidx.compose.ui.geometry.Offset(0f, 0f),
-                    end = androidx.compose.ui.geometry.Offset(1000f, 1000f)
-                )
-            )
+    GlassPanel(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        gradient = Brush.linearGradient(
+            colors = listOf(
+                PrimaryIndigo.copy(alpha = 0.2f),
+                SecondaryCyan.copy(alpha = 0.08f),
+                GlassWhite.copy(alpha = 0.02f)
+            ),
+            start = androidx.compose.ui.geometry.Offset(0f, 0f),
+            end = androidx.compose.ui.geometry.Offset(800f, 800f)
+        )
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp),
-            verticalArrangement = Arrangement.Center
+                .fillMaxWidth()
+                .padding(24.dp)
         ) {
             Text(
                 text = "Game Dashboard",
                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onBackground
+                color = Color.White
             )
             Spacer(Modifier.height(4.dp))
             Text(

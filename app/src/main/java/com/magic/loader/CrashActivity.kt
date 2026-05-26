@@ -19,13 +19,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.magic.loader.ui.theme.ErrorRed
-import com.magic.loader.ui.theme.MagicLoaderTheme
+import com.magic.loader.ui.components.GlassPanel
+import com.magic.loader.ui.theme.*
 
 class CrashActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,48 +63,67 @@ private fun CrashScreen(
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Color(0xFF0B0B10)
+        color = DarkBackground
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(20.dp)
         ) {
-            Row(
+            Spacer(Modifier.height(24.dp))
+
+            GlassPanel(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                shape = RoundedCornerShape(20.dp),
+                borderColor = ErrorRed.copy(alpha = 0.3f),
+                gradient = Brush.linearGradient(
+                    colors = listOf(ErrorRed.copy(alpha = 0.08f), GlassWhite.copy(alpha = 0.02f))
+                ),
+                contentPadding = 0.dp
             ) {
-                Column {
-                    Text(
-                        text = "Crash Detected",
-                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                        color = ErrorRed
-                    )
-                    Text(
-                        text = "Copy the log and send it to the developer",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                Row {
-                    IconButton(onClick = onCopy) {
-                        Icon(Icons.Default.Share, "Copy", tint = MaterialTheme.colorScheme.onSurface)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Crash Detected",
+                            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                            color = ErrorRed
+                        )
+                        Spacer(Modifier.height(2.dp))
+                        Text(
+                            text = "Copy the log and send it to the developer",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
-                    IconButton(onClick = onRestart) {
-                        Icon(Icons.Default.Refresh, "Restart", tint = MaterialTheme.colorScheme.onSurface)
+                    Row {
+                        IconButton(onClick = onCopy) {
+                            Icon(Icons.Default.Share, "Copy", tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                        }
+                        IconButton(onClick = onRestart) {
+                            Icon(Icons.Default.Refresh, "Restart", tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                        }
                     }
                 }
             }
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(16.dp))
 
-            Surface(
+            GlassPanel(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                shape = RoundedCornerShape(16.dp),
-                color = Color(0xFF1E1E2A)
+                shape = RoundedCornerShape(20.dp),
+                borderColor = GlassBorder,
+                gradient = Brush.linearGradient(
+                    colors = listOf(GlassWhite, Color.Transparent)
+                ),
+                contentPadding = 0.dp
             ) {
                 Text(
                     text = crashLog,
@@ -113,23 +133,29 @@ private fun CrashScreen(
                         .padding(16.dp),
                     fontFamily = FontFamily.Monospace,
                     fontSize = 11.sp,
-                    color = Color(0xFFE2E2E8),
+                    color = Color(0xFFCCCCDD),
                     lineHeight = 16.sp
                 )
             }
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(16.dp))
 
             Button(
                 onClick = onRestart,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
+                    .height(54.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = ErrorRed)
             ) {
-                Text("Restart App", fontWeight = FontWeight.Bold)
+                Text(
+                    "Restart App",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
+                )
             }
+
+            Spacer(Modifier.height(16.dp))
         }
     }
 }

@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.magic.loader.ui.components.GlassPanel
 import com.magic.loader.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,12 +71,12 @@ fun GameDetailScreen(
                         Icon(
                             Icons.Default.ArrowBack,
                             contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.onBackground
+                            tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = DarkBackground
+                    containerColor = Color.Transparent
                 ),
                 actions = {
                     if (!uiState.permissionsGranted) {
@@ -109,7 +110,7 @@ fun GameDetailScreen(
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(12.dp))
 
             GameIconSection(uiState.gameIcon, uiState.gameName)
 
@@ -118,7 +119,7 @@ fun GameDetailScreen(
             Text(
                 text = uiState.gameName,
                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onBackground,
+                color = Color.White,
                 textAlign = TextAlign.Center
             )
 
@@ -131,34 +132,52 @@ fun GameDetailScreen(
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(12.dp))
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                GlassPanel(
+                    shape = RoundedCornerShape(16.dp),
+                    borderColor = PrimaryIndigo.copy(alpha = 0.2f),
+                    gradient = Brush.linearGradient(
+                        colors = listOf(GlassWhite, Color.Transparent)
+                    ),
+                    contentPadding = 0.dp
                 ) {
-                    Surface(
-                        shape = RoundedCornerShape(8.dp),
-                        color = PrimaryIndigo.copy(alpha = 0.15f)
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "Required: v${game.version}",
-                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                            color = PrimaryIndigo,
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
-                        )
-                    }
-                    if (uiState.installedVersion != null) {
-                        Surface(
-                            shape = RoundedCornerShape(8.dp),
-                            color = SecondaryCyan.copy(alpha = 0.12f)
+                        GlassPanel(
+                            shape = RoundedCornerShape(10.dp),
+                            borderColor = PrimaryIndigo.copy(alpha = 0.2f),
+                            gradient = Brush.linearGradient(
+                                colors = listOf(PrimaryIndigo.copy(alpha = 0.12f), Color.Transparent)
+                            ),
+                            contentPadding = 0.dp
                         ) {
                             Text(
-                                text = "Installed: v${uiState.installedVersion}",
+                                text = "Required: v${game.version}",
                                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                                color = SecondaryCyan,
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                                color = PrimaryIndigo,
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp)
                             )
+                        }
+                        if (uiState.installedVersion != null) {
+                            GlassPanel(
+                                shape = RoundedCornerShape(10.dp),
+                                borderColor = SecondaryCyan.copy(alpha = 0.2f),
+                                gradient = Brush.linearGradient(
+                                    colors = listOf(SecondaryCyan.copy(alpha = 0.1f), Color.Transparent)
+                                ),
+                                contentPadding = 0.dp
+                            ) {
+                                Text(
+                                    text = "Installed: v${uiState.installedVersion}",
+                                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                                    color = SecondaryCyan,
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp)
+                                )
+                            }
                         }
                     }
                 }
@@ -168,13 +187,13 @@ fun GameDetailScreen(
                     Text(
                         text = game.description,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                         textAlign = TextAlign.Center
                     )
                 }
             }
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(20.dp))
 
             StatusCard(
                 status = uiState.status,
@@ -182,7 +201,7 @@ fun GameDetailScreen(
                 isChecking = uiState.isChecking
             )
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(20.dp))
 
             val buttonScale by animateFloatAsState(
                 targetValue = if (canLaunch) 1f else 0.96f,
@@ -197,7 +216,7 @@ fun GameDetailScreen(
                     .fillMaxWidth()
                     .height(60.dp)
                     .scale(buttonScale),
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = PrimaryIndigo,
                     disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
@@ -263,23 +282,27 @@ fun GameDetailScreen(
                     .width(60.dp)
                     .height(2.dp)
                     .clip(RoundedCornerShape(1.dp))
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.4f))
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
             )
 
             Spacer(Modifier.height(16.dp))
 
-            Surface(
+            GlassPanel(
+                modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                modifier = Modifier.fillMaxWidth()
+                borderColor = GlassBorder,
+                gradient = Brush.linearGradient(
+                    colors = listOf(GlassWhite, Color.Transparent)
+                ),
+                contentPadding = 0.dp
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         text = "Runtime Status",
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = Color.White
                     )
-                    Spacer(Modifier.height(8.dp))
+                    Spacer(Modifier.height(10.dp))
                     RuntimeStatusRow(
                         label = "Native Library",
                         active = uiState.soExtracted
@@ -307,13 +330,16 @@ private fun GameIconSection(icon: android.graphics.drawable.Drawable?, gameName:
             ?.let { BitmapPainter(it) }
     }
 
-    Surface(
+    GlassPanel(
         modifier = Modifier.size(120.dp),
         shape = RoundedCornerShape(28.dp),
-        shadowElevation = 12.dp,
-        color = MaterialTheme.colorScheme.surface
+        borderColor = GlassBorder.copy(alpha = 0.5f),
+        contentPadding = 0.dp
     ) {
-        Box(contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
             if (painter != null) {
                 Image(
                     painter = painter,
@@ -337,28 +363,20 @@ private fun GameIconSection(icon: android.graphics.drawable.Drawable?, gameName:
 
 @Composable
 private fun StatusCard(status: GameStatus, message: String, isChecking: Boolean) {
-    val containerColor = when (status) {
-        GameStatus.Ready -> SuccessGreen.copy(alpha = 0.12f)
-        GameStatus.Launching, GameStatus.Checking -> PrimaryIndigo.copy(alpha = 0.12f)
-        else -> ErrorRed.copy(alpha = 0.12f)
-    }
-    val iconTint = when (status) {
+    val accent = when (status) {
         GameStatus.Ready -> SuccessGreen
         GameStatus.Launching, GameStatus.Checking -> PrimaryIndigo
         else -> ErrorRed
     }
-    val icon = when (status) {
-        GameStatus.Ready -> Icons.Default.Check
-        GameStatus.Launching -> Icons.Default.PlayArrow
-        GameStatus.Checking -> Icons.Default.Refresh
-        else -> Icons.Default.Warning
-    }
 
-    Card(
+    GlassPanel(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        shape = RoundedCornerShape(20.dp),
+        borderColor = accent.copy(alpha = 0.2f),
+        gradient = Brush.linearGradient(
+            colors = listOf(accent.copy(alpha = 0.06f), Color.Transparent)
+        ),
+        contentPadding = 0.dp
     ) {
         Column(
             modifier = Modifier
@@ -368,23 +386,29 @@ private fun StatusCard(status: GameStatus, message: String, isChecking: Boolean)
         ) {
             Box(
                 modifier = Modifier
-                    .size(56.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(containerColor),
+                    .size(52.dp)
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(accent.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {
                 if (isChecking) {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(28.dp),
-                        color = iconTint,
+                        modifier = Modifier.size(26.dp),
+                        color = accent,
                         strokeWidth = 2.5.dp
                     )
                 } else {
+                    val icon = when (status) {
+                        GameStatus.Ready -> Icons.Default.Check
+                        GameStatus.Launching -> Icons.Default.PlayArrow
+                        GameStatus.Checking -> Icons.Default.Refresh
+                        else -> Icons.Default.Warning
+                    }
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        modifier = Modifier.size(28.dp),
-                        tint = iconTint
+                        modifier = Modifier.size(26.dp),
+                        tint = accent
                     )
                 }
             }
